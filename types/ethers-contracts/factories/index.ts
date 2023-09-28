@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { Quoter__factory } from "./Quoter__factory";
+export { QuoterV2__factory } from "./QuoterV2__factory";
