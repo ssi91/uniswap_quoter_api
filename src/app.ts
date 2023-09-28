@@ -2,7 +2,7 @@ import express from 'express';
 import {ethers, JsonRpcProvider} from "ethers";
 import {Quoter__factory} from "../types/ethers-contracts";
 
-const config = require("../../config.js");
+const config = require("../../config.json");
 
 const provider = new JsonRpcProvider(config.rpc);
 
@@ -19,7 +19,7 @@ api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
         req.params.amountIn,
         0
     );
-    quotePromise.then((result) => {
+    quotePromise.then((result: bigint) => {
         console.log(result);
         resp.json(result.toString());
     });
