@@ -25,6 +25,13 @@ api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
             amountOut: result.toString()
         });
     });
+    quotePromise.catch((reason) => {
+        console.error(reason)
+        resp.status(500);
+        resp.json({
+            reason: reason.toString()
+        });
+    });
 });
 
 api.get('/quotev2/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
@@ -46,6 +53,13 @@ api.get('/quotev2/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
             gasEstimate: value.gasEstimate.toString()
         };
         resp.json(result)
+    });
+    quoteV2Promise.catch((reason) => {
+        console.error(reason)
+        resp.status(500);
+        resp.json({
+            reason: reason.toString()
+        });
     });
 });
 
