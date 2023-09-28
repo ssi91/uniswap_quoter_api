@@ -6,8 +6,6 @@ const config = require("../../config.js");
 
 const provider = new JsonRpcProvider(config.rpc);
 
-const quoterABI = require("./../../abi/Quoter.json");
-
 const api = express();
 
 const UNISWAP_QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6'
