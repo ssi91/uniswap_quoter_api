@@ -21,8 +21,9 @@ api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
         0
     );
     quotePromise.then((result: bigint) => {
-        console.log(result);
-        resp.json(result.toString());
+        resp.json({
+            amountOut: result.toString()
+        });
     });
 });
 
