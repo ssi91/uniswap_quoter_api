@@ -1,5 +1,5 @@
 import express from 'express';
-import {ethers, JsonRpcProvider} from "ethers";
+import {JsonRpcProvider} from "ethers";
 import {Quoter__factory, QuoterV2__factory} from "../types/ethers-contracts";
 
 const config = require("../../config.json");
