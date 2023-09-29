@@ -1,9 +1,7 @@
 import express from 'express';
-import {AddressLike, BigNumberish, ContractRunner, JsonRpcProvider} from "ethers";
-import {Quoter, Quoter__factory, QuoterV2, QuoterV2__factory} from "../types/ethers-contracts";
-import {IQuoterV2} from "../types/ethers-contracts/QuoterV2";
-import QuoteExactInputSingleParamsStruct = IQuoterV2.QuoteExactInputSingleParamsStruct;
-import {Response} from 'express-serve-static-core';
+import {JsonRpcProvider} from "ethers";
+import {QuoterV2Wrapper, QuoterWrapper} from "./quoterWrappers";
+import {errorHandler} from "./helpers";
 
 const config = require("../../config.json");
 
@@ -13,81 +11,6 @@ const api = express();
 
 const UNISWAP_QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
 const UNISWAP_QUOTER_V2_ADDRESS = '0x61fFE014bA17989E743c5F6cB21bF9697530B21e';
-
-class QuoterWrapper {
-    protected _contract: Quoter | QuoterV2
-
-    constructor(address: string, rpcProvider: ContractRunner) {
-        this._contract = Quoter__factory.connect(address, rpcProvider)
-    }
-
-    protected formatParams(
-        tokenIn: AddressLike,
-        tokenOut: AddressLike,
-        fee: BigNumberish,
-        amountIn: BigNumberish,
-        sqrtPriceLimitX96: BigNumberish
-    ): any[] {
-        return [
-            tokenIn,
-            tokenOut,
-            fee,
-            amountIn,
-            sqrtPriceLimitX96
-        ];
-    }
-
-    quoteExactInputSingle(
-        tokenIn: AddressLike,
-        tokenOut: AddressLike,
-        fee: BigNumberish,
-        amountIn: BigNumberish,
-        sqrtPriceLimitX96: BigNumberish
-    ) {
-        const params = this.formatParams(
-            tokenIn,
-            tokenOut,
-            fee,
-            amountIn,
-            sqrtPriceLimitX96
-        );
-        return this._contract.quoteExactInputSingle.staticCall(...params);
-    }
-}
-
-class QuoterV2Wrapper extends QuoterWrapper {
-    constructor(address: string, rpcProvider: ContractRunner) {
-        super(address, rpcProvider);
-        this._contract = QuoterV2__factory.connect(address, rpcProvider);
-    }
-
-    protected formatParams(
-        tokenIn: AddressLike,
-        tokenOut: AddressLike,
-        fee: BigNumberish,
-        amountIn: BigNumberish,
-        sqrtPriceLimitX96: BigNumberish
-    ) {
-        const wrappedParams: QuoteExactInputSingleParamsStruct = {
-            tokenIn: tokenIn,
-            tokenOut: tokenOut,
-            fee: fee,
-            amountIn: amountIn,
-            sqrtPriceLimitX96: sqrtPriceLimitX96
-        };
-        return [wrappedParams];
-    }
-}
-
-const errorHandler = (resp: Response<any, Record<string, any>, number>) => {
-    return (reason: any) => {
-        console.error(reason)
-        resp.status(500);
-        resp.json({
-            reason: reason.toString()
-        });
-    }
-}
 
 api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
     const quoterContract = new QuoterWrapper(UNISWAP_QUOTER_ADDRESS, provider);
