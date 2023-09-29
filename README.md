@@ -1,5 +1,39 @@
 Self-hosted API to call Uniswap's Quoter Contract ([Quoter](https://docs.uniswap.org/contracts/v3/reference/periphery/lens/Quoter) and [QuoterV2](https://docs.uniswap.org/contracts/v3/reference/periphery/lens/QuoterV2) as well).  
 
+## Installation and Run
+### Before start
+The first thing that must be done is to create config file:
+```bash
+cp ./config.json.example ./config.json
+```
+Then, set your RPC node end-point in the config file:
+```json
+{
+  "rpc": "<set your end-point here>"
+}
+```
+### `npm install`
+1. Install dependencies:
+```bash
+npm install
+```
+2. Compile *.ts sources:
+```bash
+npx tsc
+```
+3. Run the server:
+```bash
+node ./js/src/app.js
+```
+
+### Docker
+An alternative way to run the service is building and running docker container:
+```bash
+QUOTER_API_IMAGE=<set your image tag>
+docker build . -t $QUOTER_API_IMAGE
+docker run -ti -p 8080:8080 $QUOTER_API_IMAGE
+```
+
 ## End-Points
 ### Quote exact input single
 ```
