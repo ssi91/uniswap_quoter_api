@@ -70,6 +70,30 @@ api.get('/quote/exact_output/:tokenIn/:tokenOut/:fee/:amountOut', (req, resp) =>
     quotePromise.catch(errorHandler(resp));
 });
 
+api.get('/quotev2/exact_output/:tokenIn/:tokenOut/:fee/:amountOut', (req, resp) => {
+    const quoterV2Contract = new QuoterV2Wrapper(UNISWAP_QUOTER_V2_ADDRESS, provider);
+
+    const quoteV2Promise = quoterV2Contract.quoteExactOutputSingle(
+        req.params.tokenIn,
+        req.params.tokenOut,
+        req.params.fee,
+        req.params.amountOut,
+        0
+    );
+    quoteV2Promise.then((value) => {
+        if (typeof value !== "bigint") {
+            let result = {
+                amountIn: value.amountIn.toString(),
+                sqrtPriceX96After: value.sqrtPriceX96After.toString(),
+                initializedTicksCrossed: value.initializedTicksCrossed.toString(),
+                gasEstimate: value.gasEstimate.toString()
+            };
+            resp.json(result);
+        }
+    });
+    quoteV2Promise.catch(errorHandler(resp));
+});
+
 const host = '0.0.0.0'
 const port = "8080"
 
