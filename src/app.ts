@@ -12,7 +12,7 @@ const api = express();
 const UNISWAP_QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
 const UNISWAP_QUOTER_V2_ADDRESS = '0x61fFE014bA17989E743c5F6cB21bF9697530B21e';
 
-api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
+api.get('/quote/exact_input/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
     const quoterContract = new QuoterWrapper(UNISWAP_QUOTER_ADDRESS, provider);
     const quotePromise = quoterContract.quoteExactInputSingle(
         req.params.tokenIn,
@@ -29,7 +29,7 @@ api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
     quotePromise.catch(errorHandler(resp));
 });
 
-api.get('/quotev2/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
+api.get('/quotev2/exact_input/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
     const quoterV2Contract = new QuoterV2Wrapper(UNISWAP_QUOTER_V2_ADDRESS, provider);
 
     const quoteV2Promise = quoterV2Contract.quoteExactInputSingle(
