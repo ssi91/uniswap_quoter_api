@@ -30,13 +30,6 @@ api.get('/quote/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
 });
 
 api.get('/quotev2/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) => {
-    const params = {
-        tokenIn: req.params.tokenIn,
-        tokenOut: req.params.tokenOut,
-        fee: req.params.fee,
-        amountIn: req.params.amountIn,
-        sqrtPriceLimitX96: 0
-    };
     const quoterV2Contract = new QuoterV2Wrapper(UNISWAP_QUOTER_V2_ADDRESS, provider);
 
     const quoteV2Promise = quoterV2Contract.quoteExactInputSingle(
