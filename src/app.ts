@@ -53,6 +53,23 @@ api.get('/quotev2/exact_input/:tokenIn/:tokenOut/:fee/:amountIn', (req, resp) =>
     quoteV2Promise.catch(errorHandler(resp));
 });
 
+api.get('/quote/exact_output/:tokenIn/:tokenOut/:fee/:amountOut', (req, resp) => {
+    const quoterContract = new QuoterWrapper(UNISWAP_QUOTER_ADDRESS, provider);
+    const quotePromise = quoterContract.quoteExactOutputSingle(
+        req.params.tokenIn,
+        req.params.tokenOut,
+        req.params.fee,
+        req.params.amountOut,
+        0
+    );
+    quotePromise.then((result) => {
+        resp.json({
+            amountIn: result.toString()
+        });
+    });
+    quotePromise.catch(errorHandler(resp));
+});
+
 const host = '0.0.0.0'
 const port = "8080"
 

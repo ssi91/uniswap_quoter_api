@@ -2,6 +2,7 @@ import {Quoter, Quoter__factory, QuoterV2, QuoterV2__factory} from "../types/eth
 import {AddressLike, BigNumberish, ContractRunner} from "ethers";
 import {IQuoterV2} from "../types/ethers-contracts/QuoterV2";
 import QuoteExactInputSingleParamsStruct = IQuoterV2.QuoteExactInputSingleParamsStruct;
+import QuoteExactOutputSingleParamsStruct = IQuoterV2.QuoteExactOutputSingleParamsStruct;
 
 export class QuoterWrapper {
     protected _contract: Quoter | QuoterV2
@@ -10,7 +11,7 @@ export class QuoterWrapper {
         this._contract = Quoter__factory.connect(address, rpcProvider)
     }
 
-    protected formatParams(
+    protected formatInputParams(
         tokenIn: AddressLike,
         tokenOut: AddressLike,
         fee: BigNumberish,
@@ -26,6 +27,16 @@ export class QuoterWrapper {
         ];
     }
 
+    protected formatOutputParams(
+        tokenIn: AddressLike,
+        tokenOut: AddressLike,
+        fee: BigNumberish,
+        amount: BigNumberish,
+        sqrtPriceLimitX96: BigNumberish
+    ): any[] {
+        return this.formatInputParams(tokenIn, tokenOut, fee, amount, sqrtPriceLimitX96);
+    }
+
     quoteExactInputSingle(
         tokenIn: AddressLike,
         tokenOut: AddressLike,
@@ -33,7 +44,7 @@ export class QuoterWrapper {
         amountIn: BigNumberish,
         sqrtPriceLimitX96: BigNumberish
     ) {
-        const params = this.formatParams(
+        const params = this.formatInputParams(
             tokenIn,
             tokenOut,
             fee,
@@ -41,6 +52,23 @@ export class QuoterWrapper {
             sqrtPriceLimitX96
         );
         return this._contract.quoteExactInputSingle.staticCall(...params);
+    }
+
+    quoteExactOutputSingle(
+        tokenIn: AddressLike,
+        tokenOut: AddressLike,
+        fee: BigNumberish,
+        amountOut: BigNumberish,
+        sqrtPriceLimitX96: BigNumberish
+    ) {
+        const params = this.formatOutputParams(
+            tokenIn,
+            tokenOut,
+            fee,
+            amountOut,
+            sqrtPriceLimitX96
+        );
+        return this._contract.quoteExactOutputSingle.staticCall(...params);
     }
 }
 
@@ -50,7 +78,7 @@ export class QuoterV2Wrapper extends QuoterWrapper {
         this._contract = QuoterV2__factory.connect(address, rpcProvider);
     }
 
-    protected formatParams(
+    protected formatInputParams(
         tokenIn: AddressLike,
         tokenOut: AddressLike,
         fee: BigNumberish,
@@ -62,6 +90,23 @@ export class QuoterV2Wrapper extends QuoterWrapper {
             tokenOut: tokenOut,
             fee: fee,
             amountIn: amountIn,
+            sqrtPriceLimitX96: sqrtPriceLimitX96
+        };
+        return [wrappedParams];
+    }
+
+    protected formatOutputParams(
+        tokenIn: AddressLike,
+        tokenOut: AddressLike,
+        fee: BigNumberish,
+        amount: BigNumberish,
+        sqrtPriceLimitX96: BigNumberish
+    ) {
+        const wrappedParams: QuoteExactOutputSingleParamsStruct = {
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
+            fee: fee,
+            amount: amount,
             sqrtPriceLimitX96: sqrtPriceLimitX96
         };
         return [wrappedParams];
