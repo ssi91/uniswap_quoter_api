@@ -37,7 +37,7 @@ docker run -ti -p 8080:8080 $QUOTER_API_IMAGE
 ## End-Points
 ### Quote exact input single
 ```
-/quote/:tokenIn/:tokenOut/:fee/:amountIn
+/quote/exact_input/:tokenIn/:tokenOut/:fee/:amountIn
 ```
 * `tokenIn` - address of token to sell
 * `tokenOut` - address of token to buy
@@ -51,10 +51,10 @@ docker run -ti -p 8080:8080 $QUOTER_API_IMAGE
 }
 ```
 #### Example
-To request how much tokens well be received the [pool](https://info.uniswap.org/#/pools/0x7379e81228514a1d2a6cf7559203998e20598346)
+To request how many tokens will be received the [pool](https://info.uniswap.org/#/pools/0x7379e81228514a1d2a6cf7559203998e20598346)
 swapping [sETH2](https://info.uniswap.org/#/tokens/0xfe2e637202056d30016725477c5da089ab0a043a) for the [wrapped ETH](https://info.uniswap.org/#/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2):
 ```
-/quote/0xfe2e637202056d30016725477c5da089ab0a043a/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2/3000/1000
+/quote/exact_input/0xfe2e637202056d30016725477c5da089ab0a043a/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2/3000/1000
 ```
 So, response will be:
 ```json
@@ -65,7 +65,7 @@ So, response will be:
 
 ### Quote exact input single from QuoterV2
 ```
-/quotev2/:tokenIn/:tokenOut/:fee/:amountIn
+/quotev2/exact_input/:tokenIn/:tokenOut/:fee/:amountIn
 ```
 URL-parameters are the same as described above.
 #### Response
@@ -80,7 +80,7 @@ URL-parameters are the same as described above.
 #### Example
 To request quote for the same pool as was presented above:
 ```
-/quotev2/0xfe2e637202056d30016725477c5da089ab0a043a/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2/3000/1000
+/quotev2/exact_input/0xfe2e637202056d30016725477c5da089ab0a043a/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2/3000/1000
 ```
 ```json
 {
@@ -88,5 +88,59 @@ To request quote for the same pool as was presented above:
     "sqrtPriceX96After": "79425280725702617941369357366",
     "initializedTicksCrossed": "1",
     "gasEstimate": "80299"
+}
+```
+### Quote exact output single
+```
+/quote/exact_output/:tokenIn/:tokenOut/:fee/:amountOut
+```
+* `tokenIn` - address of token to sell
+* `tokenOut` - address of token to buy
+* `fee` - fee percentage scaled by `10^4`
+* `amountOut` - amount of tokens `tokenOut` to buy
+
+#### Response
+```json
+{
+  "amountIn": <amountIn>
+}
+```
+#### Example
+To request how many tokens needed to be sent the [pool](https://info.uniswap.org/#/pools/0x7379e81228514a1d2a6cf7559203998e20598346)
+swapping [sETH2](https://info.uniswap.org/#/tokens/0xfe2e637202056d30016725477c5da089ab0a043a) for the [wrapped ETH](https://info.uniswap.org/#/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2):
+```
+/quote/exact_output/0xfe2e637202056d30016725477c5da089ab0a043a/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2/3000/1000
+```
+So, response will be:
+```json
+{
+  "amountIn": "1009"
+}
+```
+### Quote exact output single from QuoterV2
+```
+/quotev2/exact_output/:tokenIn/:tokenOut/:fee/:amountOut
+```
+URL-parameters are the same as described above.
+#### Response
+```json
+{
+    "amountOut": <amountIn>,
+    "sqrtPriceX96After":,
+    "initializedTicksCrossed":,
+    "gasEstimate":
+}
+```
+#### Example
+To request quote for the same pool as was presented above:
+```
+/quotev2/exact_output/0xfe2e637202056d30016725477c5da089ab0a043a/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2/3000/1000
+```
+```json
+{
+  "amountIn": "1009",
+  "sqrtPriceX96After": "79425355379809575002830464896",
+  "initializedTicksCrossed": "1",
+  "gasEstimate": "81475"
 }
 ```
