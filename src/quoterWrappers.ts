@@ -70,6 +70,10 @@ export class QuoterWrapper {
         );
         return this._contract.quoteExactOutputSingle.staticCall(...params);
     }
+
+    quoteExactInput(path: string, amountIn: BigNumberish) {
+        return this._contract.quoteExactInput.staticCall(path, amountIn);
+    }
 }
 
 export class QuoterV2Wrapper extends QuoterWrapper {

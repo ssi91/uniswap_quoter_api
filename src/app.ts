@@ -1,13 +1,14 @@
 import express from 'express';
 import {JsonRpcProvider} from "ethers";
 import {QuoterV2Wrapper, QuoterWrapper} from "./quoterWrappers";
-import {errorHandler} from "./helpers";
+import {encodePath, errorHandler} from "./helpers";
 
 const config = require("../../config.json");
 
 const provider = new JsonRpcProvider(config.rpc);
 
 const api = express();
+api.use(express.json())
 
 const UNISWAP_QUOTER_ADDRESS = '0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6';
 const UNISWAP_QUOTER_V2_ADDRESS = '0x61fFE014bA17989E743c5F6cB21bF9697530B21e';
@@ -92,6 +93,21 @@ api.get('/quotev2/exact_output/:tokenIn/:tokenOut/:fee/:amountOut', (req, resp) 
         }
     });
     quoteV2Promise.catch(errorHandler(resp));
+});
+
+api.post('/quote/exact_input/path/', (req, resp) => {
+    const path = req.body.path;
+    let contractPath: string = encodePath(path);
+
+    const quoterContract = new QuoterWrapper(UNISWAP_QUOTER_ADDRESS, provider);
+    const quoterPromise = quoterContract.quoteExactInput(contractPath, req.body.amountIn);
+
+    quoterPromise.then((result) => {
+        resp.json({
+            amountOut: result.toString()
+        });
+    });
+    quoterPromise.catch(errorHandler(resp));
 });
 
 const host = '0.0.0.0'
