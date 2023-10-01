@@ -110,6 +110,29 @@ api.post('/quote/exact_input/path/', (req, resp) => {
     quoterPromise.catch(errorHandler(resp));
 });
 
+api.post('/quotev2/exact_input/path/', (req, resp) => {
+    const path = req.body.path;
+    let contractPath: string = encodePath(path);
+
+    const quoterContract = new QuoterV2Wrapper(UNISWAP_QUOTER_V2_ADDRESS, provider);
+    const quoterPromise = quoterContract.quoteExactInput(contractPath, req.body.amountIn);
+
+    quoterPromise.then((value) => {
+        console.log(value);
+        if (typeof value !== "bigint") {
+            let result = {
+                amountOut: value.amountOut.toString(),
+                sqrtPriceX96AfterList: value.sqrtPriceX96AfterList.map((value) => value.toString()),
+                initializedTicksCrossed: value.initializedTicksCrossedList.map((value) => value.toString()),
+                gasEstimate: value.gasEstimate.toString()
+            };
+            resp.json(result);
+        }
+    });
+    quoterPromise.catch(errorHandler(resp));
+});
+
+
 const host = '0.0.0.0'
 const port = "8080"
 
