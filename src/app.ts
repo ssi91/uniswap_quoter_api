@@ -132,6 +132,42 @@ api.post('/quotev2/exact_input/path/', (req, resp) => {
     quoterPromise.catch(errorHandler(resp));
 });
 
+api.post('/quote/exact_output/path/', (req, resp) => {
+    const path = req.body.path;
+    let contractPath: string = encodePath(path, false);
+
+    const quoterContract = new QuoterWrapper(UNISWAP_QUOTER_ADDRESS, provider);
+    const quoterPromise = quoterContract.quoteExactOutput(contractPath, req.body.amountOut);
+
+    quoterPromise.then((result) => {
+        resp.json({
+            amountIn: result.toString()
+        });
+    });
+    quoterPromise.catch(errorHandler(resp));
+});
+
+api.post('/quotev2/exact_output/path/', (req, resp) => {
+    const path = req.body.path;
+    let contractPath: string = encodePath(path, false);
+
+    const quoterContract = new QuoterV2Wrapper(UNISWAP_QUOTER_V2_ADDRESS, provider);
+    const quoterPromise = quoterContract.quoteExactOutput(contractPath, req.body.amountOut);
+
+    quoterPromise.then((value) => {
+        console.log(value);
+        if (typeof value !== "bigint") {
+            let result = {
+                amountOut: value.amountIn.toString(),
+                sqrtPriceX96AfterList: value.sqrtPriceX96AfterList.map((value) => value.toString()),
+                initializedTicksCrossed: value.initializedTicksCrossedList.map((value) => value.toString()),
+                gasEstimate: value.gasEstimate.toString()
+            };
+            resp.json(result);
+        }
+    });
+    quoterPromise.catch(errorHandler(resp));
+});
 
 const host = '0.0.0.0'
 const port = "8080"

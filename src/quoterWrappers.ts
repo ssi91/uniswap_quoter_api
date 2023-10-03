@@ -74,6 +74,10 @@ export class QuoterWrapper {
     quoteExactInput(path: string, amountIn: BigNumberish) {
         return this._contract.quoteExactInput.staticCall(path, amountIn);
     }
+
+    quoteExactOutput(path: string, amountOut: BigNumberish) {
+        return this._contract.quoteExactOutput.staticCall(path, amountOut);
+    }
 }
 
 export class QuoterV2Wrapper extends QuoterWrapper {
