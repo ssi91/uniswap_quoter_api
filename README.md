@@ -125,7 +125,7 @@ URL-parameters are the same as described above.
 #### Response
 ```json
 {
-    "amountOut": <amountIn>,
+    "amountIn": <amountIn>,
     "sqrtPriceX96After":,
     "initializedTicksCrossed":,
     "gasEstimate":
