@@ -144,3 +144,121 @@ To request quote for the same pool as was presented above:
   "gasEstimate": "81475"
 }
 ```
+
+### Quote exact input multiple pools from Quoter
+```
+POST /quote/exact_input/path/
+```
+Body:
+```json
+{
+    "path": [
+        {
+            "tokenIn":,
+            "fee":,
+            "tokenOut":
+        },
+        {
+            "fee":,
+            "tokenOut":
+        }
+    ],
+    "amountIn":
+}
+
+```
+#### Response
+```json
+{
+    "amountOut":
+}
+```
+#### Example
+```
+{
+    "path": [
+        {
+            "tokenIn": "0xfe2e637202056d30016725477c5da089ab0a043a",
+            "fee": 3000,
+            "tokenOut": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+        },
+        {
+            "fee": 100,
+            "tokenOut": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0"
+        }
+    ],
+    "amountIn": 1000
+}
+```
+#### Response
+```json
+{
+  "amountOut": "868"
+}
+```
+
+### Quote exact input multiple pools from QuoterV2
+```
+POST /quotev2/exact_input/path/
+```
+Body:
+```json
+{
+    "path": [
+        {
+            "tokenIn":,
+            "fee":,
+            "tokenOut":
+        },
+        {
+            "fee":,
+            "tokenOut":
+        }
+    ],
+    "amountIn":
+}
+
+```
+#### Response
+```json
+{
+    "amountOut":,
+    "sqrtPriceX96AfterList": [
+    ],
+    "initializedTicksCrossed": [
+    ],
+    "gasEstimate":
+}
+```
+#### Example
+```
+{
+    "path": [
+        {
+            "tokenIn": "0xfe2e637202056d30016725477c5da089ab0a043a",
+            "fee": 3000,
+            "tokenOut": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+        },
+        {
+            "fee": 100,
+            "tokenOut": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0"
+        }
+    ],
+    "amountIn": 1000
+}
+```
+#### Response
+```json
+{
+  "amountOut": "868",
+  "sqrtPriceX96AfterList": [
+    "79425391438907057034580267277",
+    "84632450067933843376332582064"
+  ],
+  "initializedTicksCrossed": [
+    "1",
+    "1"
+  ],
+  "gasEstimate": "154436"
+}
+```
