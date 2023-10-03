@@ -262,3 +262,120 @@ Body:
   "gasEstimate": "154436"
 }
 ```
+### Quote exact output multiple pools from Quoter
+```
+POST /quote/exact_output/path/
+```
+Body:
+```json
+{
+    "path": [
+        {
+            "tokenIn":,
+            "fee":,
+            "tokenOut":
+        },
+        {
+            "fee":,
+            "tokenIn":
+        }
+    ],
+    "amountOut":
+}
+
+```
+#### Response
+```json
+{
+    "amountIn":
+}
+```
+#### Example
+```
+{
+    "path": [
+        {
+            "tokenIn": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "fee": 3000,
+            "tokenOut": "0xfe2e637202056d30016725477c5da089ab0a043a"
+        },
+        {
+            "fee": 100,
+            "tokenOut": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0"
+        }
+    ],
+    "amountOut": 1000
+}
+```
+#### Response
+```json
+{
+  "amountIn": "877"
+}
+```
+
+### Quote exact output multiple pools from QuoterV2
+```
+POST /quotev2/exact_output/path/
+```
+Body:
+```json
+{
+    "path": [
+        {
+            "tokenIn":,
+            "fee":,
+            "tokenOut":
+        },
+        {
+            "fee":,
+            "tokenOut":
+        }
+    ],
+    "amountOut":
+}
+
+```
+#### Response
+```json
+{
+    "amountIn":,
+    "sqrtPriceX96AfterList": [
+    ],
+    "initializedTicksCrossed": [
+    ],
+    "gasEstimate":
+}
+```
+#### Example
+```
+{
+    "path": [
+        {
+            "tokenIn": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "fee": 3000,
+            "tokenOut": "0xfe2e637202056d30016725477c5da089ab0a043a"
+        },
+        {
+            "fee": 100,
+            "tokenOut": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0"
+        }
+    ],
+    "amountOut": 1000
+}
+```
+#### Response
+```json
+{
+  "amountIn": "877",
+  "sqrtPriceX96AfterList": [
+    "79422085352598054381621648226",
+    "84651472428645784549376282244"
+  ],
+  "initializedTicksCrossed": [
+    "1",
+    "1"
+  ],
+  "gasEstimate": "211963"
+}
+```
