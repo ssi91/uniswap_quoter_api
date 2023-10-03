@@ -158,7 +158,7 @@ api.post('/quotev2/exact_output/path/', (req, resp) => {
         console.log(value);
         if (typeof value !== "bigint") {
             let result = {
-                amountOut: value.amountIn.toString(),
+                amountIn: value.amountIn.toString(),
                 sqrtPriceX96AfterList: value.sqrtPriceX96AfterList.map((value) => value.toString()),
                 initializedTicksCrossed: value.initializedTicksCrossedList.map((value) => value.toString()),
                 gasEstimate: value.gasEstimate.toString()
